@@ -32,10 +32,10 @@ rf_tuned <- tune_grid(rf_workflow,
                       resamples = folds,
                       grid = rf_grid,
                       verbose = TRUE,
-                      control = control_grid(save_pred = TRUE, 
+                      control = control_grid(save_pred = TRUE,
                                              save_workflow = TRUE,
                                              verbose = TRUE,
                                              parallel_over = "everything"))
 
 
-save(rf_tuned, file = "attempt_2/results/rf_tuned.rda")
+save(rf_tuned, rf_workflow, file = "attempt_2/results/rf_tuned.rda")

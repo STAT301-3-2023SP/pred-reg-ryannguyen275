@@ -38,4 +38,4 @@ svm_radial_tuned <- tune_grid(svm_radial_workflow,
                                                      parallel_over = "everything"))
 
 
-save(svm_radial_tuned, file = "attempt_2/results/svm_radial_tuned.rda")
+save(svm_radial_tuned, svm_radial_workflow, file = "attempt_2/results/svm_radial_tuned.rda")

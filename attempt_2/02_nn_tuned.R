@@ -36,4 +36,4 @@ nn_tuned <- tune_grid(nn_workflow,
                                              verbose = TRUE,
                                              parallel_over = "everything"))
 
-save(nn_tuned, file = "attempt_2/results/nn_tuned.rda")
+save(nn_tuned, nn_workflow, file = "attempt_2/results/nn_tuned.rda")

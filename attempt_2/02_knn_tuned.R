@@ -29,7 +29,7 @@ knn_tuned <- tune_grid(knn_workflow,
                        verbose = TRUE,
                        grid = knn_grid,
                        control = control_grid(save_pred = TRUE, 
-                                              save_workflow = FALSE,
+                                              save_workflow = TRUE,
                                               verbose = TRUE,
                                               parallel_over = "everything"))
 
