@@ -28,3 +28,15 @@
 .Renviron
 data/folds.rda
 
+attempt_1/results/en_tuned.rda
+attempt_1/results/en_tuned3.rda
+attempt_1/results/en_tuned4.rda
+attempt_1/results/mars_tuned.rda
+attempt_1/results/rf_tuned3.rda
+attempt_1/results/rf_tuned4.rda
+attempt_1/results/svm_poly_tuned.rda
+attempt_1/results/svm_radial_tuned.rda
+attempt_1/results/svm_radial_tuned2.rda
+attempt_1/results/svm_radial_tuned3.rda
+
+git rm --cached
