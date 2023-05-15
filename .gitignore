@@ -55,6 +55,8 @@ attempt_2/results/bt_tuned.rda
 attempt_2/results/knn_tuned.rda
 attempt_2/results/mars_tuned.rda
 attempt_2/results/nn_tuned.rda
+attempt_2/results/svm_poly_tuned.rda
+attempt_2/results/svm_radial_tuned.rda
 
 attempt_2/setups/setup_1.rda
 
