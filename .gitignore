@@ -28,6 +28,7 @@
 .Renviron
 data/folds.rda
 
+# Attempt 1
 attempt_1/results/en_tuned.rda
 attempt_1/results/en_tuned3.rda
 attempt_1/results/en_tuned4.rda
@@ -47,3 +48,13 @@ attempt_1/setups/setup6.rda
 attempt_1/setups/setup8.rda
 
 git rm --cached 
+
+# Attempt 2
+attempt_2/results/en_tuned.rda
+attempt_2/results/bt_tuned.rda
+attempt_2/results/knn_tuned.rda
+attempt_2/results/mars_tuned.rda
+attempt_2/results/nn_tuned.rda
+
+attempt_2/setups/setup_1.rda
+

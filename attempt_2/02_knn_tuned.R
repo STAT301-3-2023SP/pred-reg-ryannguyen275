@@ -1,0 +1,37 @@
+# K-Nearest Neighbors Tuning
+
+##### LOAD PACKAGES/DATA ##############################################
+
+library(tidymodels)
+library(tidyverse)
+
+library(doMC)
+registerDoMC(cores = 4)
+
+load("attempt_2/setups/setup_1.rda")
+
+##### DEFINE ENGINES/WORKFLOWS #########################################
+knn_model <- nearest_neighbor(mode = "regression",
+                              neighbors = tune()) %>% 
+  set_engine("kknn")
+
+knn_param <- extract_parameter_set_dials(knn_model)
+
+knn_grid <- grid_regular(knn_param, levels = 5)
+
+knn_workflow <- workflow() %>% 
+  add_model(knn_model) %>% 
+  add_recipe(recipe1)
+
+##### TUNE GRID ########################################################
+knn_tuned <- tune_grid(knn_workflow,
+                       resamples = folds,
+                       verbose = TRUE,
+                       grid = knn_grid,
+                       control = control_grid(save_pred = TRUE, 
+                                              save_workflow = FALSE,
+                                              verbose = TRUE,
+                                              parallel_over = "everything"))
+
+save(knn_tuned, file = "attempt_2/results/knn_tuned.rda")
+
