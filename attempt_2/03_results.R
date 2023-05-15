@@ -19,6 +19,7 @@ for(i in result_files) {
 load("attempt_2/results/rf_tuned.rda")
 load("attempt_2/results/svm_radial_tuned.rda")
 load("attempt_2/results/nn_tuned.rda")
+load("attempt_2/results/model_results.rda")
 
 ####### PUT ALL GRIDS TG ############################################################
 model_set <- as_workflow_set(
