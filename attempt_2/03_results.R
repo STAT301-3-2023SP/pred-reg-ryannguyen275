@@ -41,6 +41,7 @@ model_results <- model_set %>%
   unnest(cols = c(best))
 
 save(model_results, file = "attempt_2/results/model_results.rda")
+load("attempt_2/results/model_results.rda")
  
 ##### FINAL FIT ######################################################
 rf_workflow <- rf_workflow %>% 

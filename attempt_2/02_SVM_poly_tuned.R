@@ -39,5 +39,5 @@ svm_poly_tuned <- tune_grid(svm_poly_workflow,
                                                    parallel_over = "everything"))
 
 
-save(svm_poly_tuned, file = "attempt_2/results/svm_poly_tuned.rda")
+save(svm_poly_tuned, svm_poly_workflow, file = "attempt_2/results/svm_poly_tuned.rda")
 
