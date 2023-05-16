@@ -7,41 +7,19 @@ tidymodels_prefer()
 registerDoMC(cores = 4)
 
 ##### LOAD PACKAGES/DATA ##############################################
-load("attempt_2/setups/setup_1.rda")
+load("attempt_3/setups/setup_1.rda")
 test <- read_csv("data/test.csv")
 
-result_files <- list.files("attempt_2/results", "*.rda", full.names = TRUE)
+load("attempt_3/results/rf_tuned.rda")
+load("attempt_3/results/svm_radial_tuned.rda")
+load("attempt_3/results/svm_poly_tuned.rda")
 
-for(i in result_files) {
-  load(i)
-}
+data_stacks <- stacks() %>%
+  add_candidates(rf_tuned) %>% # 15 models
+  add_candidates(svm_radial_tuned) %>% # 1 model
+  add_candidates(svm_poly_tuned)
 
-load("attempt_2/results/rf_tuned.rda")
-load("attempt_2/results/svm_radial_tuned.rda")
-load("attempt_2/results/nn_tuned.rda")
-load("attempt_2/results/model_results.rda")
-
-####### PUT ALL GRIDS TG ############################################################
-model_set <- as_workflow_set(
-  "elastic_net" = en_tuned,
-  "rand_forest" = rf_tuned, 
-  "knn" = knn_tuned,
-  "boosted_tree" = bt_tuned,
-  "nn" = nn_tuned,
-  "svm_poly" = svm_poly_tuned,
-  "svm_radial" = svm_radial_tuned,
-  "mars" = mars_tuned
-)
-
-## Table of results
-model_results <- model_set %>% 
-  group_by(wflow_id) %>% 
-  mutate(best = map(result, show_best, metric = "rmse", n = 1)) %>% 
-  select(best) %>% 
-  unnest(cols = c(best))
-
-save(model_results, file = "attempt_2/results/model_results.rda")
-load("attempt_2/results/svm_poly_tuned.rda")
+as_tibble(data_stacks)
  
 ##### FINAL FIT ######################################################
 svm_poly_workflow <- svm_poly_workflow %>% 

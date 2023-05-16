@@ -5,13 +5,14 @@
 library(tidymodels)
 library(tidyverse)
 library(tictoc)
+library(stacks)
 
 library(doMC)
 registerDoMC(cores = 4)
 
 tidymodels_prefer ()
 
-load("attempt_2/setups/setup_1.rda")
+load("attempt_3/setups/setup_1.rda")
 
 ##### DEFINE ENGINES/WORKFLOWS #########################################
 svm_radial_model <- svm_rbf(mode = "regression",
@@ -32,10 +33,8 @@ svm_radial_tuned <- tune_grid(svm_radial_workflow,
                               resamples = folds,
                               grid = svm_radial_grid,
                               verbose = TRUE,
-                              control = control_grid(save_pred = TRUE, 
-                                                     save_workflow = TRUE,
-                                                     verbose = TRUE,
-                                                     parallel_over = "everything"))
+                              control = control_stack_resamples(),
+                              metrics = metric_set(rmse))
 
 
-save(svm_radial_tuned, svm_radial_workflow, file = "attempt_2/results/svm_radial_tuned.rda")
+save(svm_radial_tuned, svm_radial_workflow, file = "attempt_3/results/svm_radial_tuned.rda")

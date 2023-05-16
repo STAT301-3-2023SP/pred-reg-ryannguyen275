@@ -3,14 +3,14 @@
 
 library(tidymodels)
 library(tidyverse)
-library(tictoc)
+library(stacks)
 
 library(doMC)
 registerDoMC(cores = 4)
 
 tidymodels_prefer ()
 
-load("attempt_2/setups/setup_1.rda")
+load("attempt_3/setups/setup_1.rda")
 
 ##### DEFINE ENGINES/WORKFLOWS #########################################
 rf_model <- rand_forest(min_n = tune(),
@@ -32,10 +32,8 @@ rf_tuned <- tune_grid(rf_workflow,
                       resamples = folds,
                       grid = rf_grid,
                       verbose = TRUE,
-                      control = control_grid(save_pred = TRUE,
-                                             save_workflow = TRUE,
-                                             verbose = TRUE,
-                                             parallel_over = "everything"))
+                      control = control_stack_resamples(),
+                      metrics = metric_set(rmse))
 
 
-save(rf_tuned, rf_workflow, file = "attempt_2/results/rf_tuned.rda")
+save(rf_tuned, rf_workflow, file = "attempt_3/results/rf_tuned.rda")

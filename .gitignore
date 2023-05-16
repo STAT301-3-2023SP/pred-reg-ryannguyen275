@@ -63,3 +63,7 @@ attempt_2/setups/setup_1.rda
 
 # Attempt 3
 attempt_3/setups/setup_1.rda
+
+attempt_3/results/rf_tuned.rda
+attempt_3/results/svm_poly_tuned.rda
+attempt_3/results/svm_radial_tuned.rda
