@@ -42,7 +42,6 @@ model_results <- model_set %>%
 
 save(model_results, file = "attempt_2/results/model_results.rda")
 load("attempt_2/results/svm_poly_tuned.rda")
-load("attempt_2/results/model_results.rda")
  
 ##### FINAL FIT ######################################################
 svm_poly_workflow <- svm_poly_workflow %>% 
