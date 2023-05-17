@@ -1,0 +1,41 @@
+# SVM Polynomial Tuning
+
+##### LOAD PACKAGES/DATA ##############################################
+
+library(tidymodels)
+library(tidyverse)
+library(stacks)
+
+library(doMC)
+registerDoMC(cores = 4)
+
+tidymodels_prefer ()
+
+load("attempt_3/setups/setup_1.rda")
+
+##### DEFINE ENGINES/WORKFLOWS #########################################
+svm_poly_model <- svm_poly(mode = "regression",
+                           cost = tune(),
+                           degree = tune(),
+                           scale_factor = tune()) %>%
+  set_engine("kernlab")
+
+svm_poly_param <- extract_parameter_set_dials(svm_poly_model)
+
+svm_poly_grid <- grid_regular(svm_poly_param, levels = 5)
+
+svm_poly_workflow <- workflow() %>% 
+  add_model(svm_poly_model) %>% 
+  add_recipe(recipe1)
+
+##### TUNE GRID ########################################################
+svm_poly_tuned <- tune_grid(svm_poly_workflow,
+                            resamples = folds,
+                            grid = svm_poly_grid,
+                            verbose = TRUE,
+                            control = control_stack_resamples(),
+                            metrics = metric_set(rmse))
+
+
+save(svm_poly_tuned, svm_poly_workflow, file = "attempt_4/results/svm_poly_tuned.rda")
+

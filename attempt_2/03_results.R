@@ -16,10 +16,13 @@ for(i in result_files) {
   load(i)
 }
 
-load("attempt_2/results/rf_tuned.rda")
+load("attempt_2/results/_tuned.rda")
 load("attempt_2/results/svm_radial_tuned.rda")
 load("attempt_2/results/nn_tuned.rda")
 load("attempt_2/results/model_results.rda")
+
+nn_tuned %>% 
+  show_best(metric = "rmse")
 
 ####### PUT ALL GRIDS TG ############################################################
 model_set <- as_workflow_set(

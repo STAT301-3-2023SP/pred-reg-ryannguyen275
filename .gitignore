@@ -112,3 +112,9 @@ attempt_3/setups/setup_1.rda
 .git/objects/12/a645b0ca447c7d7826ae80d96885127719dc2f
 .git/objects/85/5ab7658c5d74cde4f7bb4996fee336374e04df
 data/folds.rda
+
+git rm --cached
+
+# Attempt 4
+attempt_4/results/en_tuned.rda
+attempt_4/setups/setup_1.rda
