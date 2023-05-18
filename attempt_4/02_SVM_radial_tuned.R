@@ -12,7 +12,7 @@ registerDoMC(cores = 4)
 
 tidymodels_prefer ()
 
-load("attempt_3/setups/setup_1.rda")
+load("attempt_4/setups/setup_1.rda")
 
 ##### DEFINE ENGINES/WORKFLOWS #########################################
 svm_radial_model <- svm_rbf(mode = "regression",
@@ -22,7 +22,7 @@ svm_radial_model <- svm_rbf(mode = "regression",
 
 svm_radial_param <- extract_parameter_set_dials(svm_radial_model)
 
-svm_radial_grid <- grid_regular(svm_radial_param, levels = 5)
+svm_radial_grid <- grid_regular(svm_radial_param, levels = 7)
 
 svm_radial_workflow <- workflow() %>% 
   add_model(svm_radial_model) %>% 

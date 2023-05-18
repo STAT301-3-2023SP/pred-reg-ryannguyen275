@@ -31,7 +31,7 @@ nn_workflow <- workflow() %>%
 nn_tuned <- tune_grid(nn_workflow,
                       resamples = folds,
                       grid = nn_grid,
-                      control = control = control_stack_resamples(),
+                      control = control_stack_resamples(),
                       metrics = metric_set(rmse))
 
 save(nn_tuned, nn_workflow, file = "attempt_4/results/nn_tuned.rda")
