@@ -118,3 +118,14 @@ git rm --cached
 # Attempt 4
 attempt_4/results/en_tuned.rda
 attempt_4/setups/setup_1.rda
+attempt_4/results/bt_tuned.rda
+attempt_4/results/knn_tuned.rda
+attempt_4/results/mars_tuned.rda
+attempt_4/results/nn_tuned.rda
+attempt_4/results/rf_tuned.rda
+attempt_4/results/svm_radial_tuned.rda
+attempt_4/results/svm_poly_tuned.rda
+
+
+
+
