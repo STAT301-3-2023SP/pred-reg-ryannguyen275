@@ -8,9 +8,10 @@ registerDoMC(cores = 4)
 
 ##### LOAD PACKAGES/DATA ##############################################
 load("attempt_2/setups/setup_1.rda")
+load("data/train.rda")
 test <- read_csv("data/test.csv")
 
-result_files <- list.files("attempt_2/results", "*.rda", full.names = TRUE)
+result_files <- list.files("attempt_1/results", "*.rda", full.names = TRUE)
 
 for(i in result_files) {
   load(i)
@@ -39,23 +40,23 @@ model_set <- as_workflow_set(
 ## Table of results
 model_results <- model_set %>% 
   group_by(wflow_id) %>% 
-  mutate(best = map(result, show_best, metric = "rmse", n = 1)) %>% 
+  mutate(best = map(result, show_best, metric = "roc_auc", n = 1)) %>% 
   select(best) %>% 
   unnest(cols = c(best))
 
-save(model_results, file = "attempt_2/results/model_results.rda")
+save(model_results, file = "attempt_1/results/model_results.rda")
 load("attempt_2/results/svm_poly_tuned.rda")
 load("attempt_2/results/model_results.rda")
  
 ##### FINAL FIT ######################################################
-svm_poly_workflow <- svm_poly_workflow %>% 
-  finalize_workflow(select_best(svm_poly_tuned, metric = "rmse"))
+nn_workflow <- nn_workflow %>% 
+  finalize_workflow(select_best(nn_tuned, metric = "roc_auc"))
 
-final_fit <- fit(svm_poly_workflow, train_data)
+final_fit <- fit(nn_workflow, train)
 
 predictions <- predict(final_fit, test) %>% 
   bind_cols(test %>% select(id)) %>% 
-  rename(y = .pred)
+  rename(y = .pred_class)
 
-write_csv(predictions, file = "submissions/21_submission.csv")
+write_csv(predictions, file = "submissions/submission_1.csv")
 

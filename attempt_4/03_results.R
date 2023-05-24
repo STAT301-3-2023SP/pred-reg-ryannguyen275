@@ -16,6 +16,8 @@ load("attempt_4/results/svm_poly_tuned.rda")
 load("attempt_4/results/bt_tuned.rda")
 load("attempt_4/results/rf_tuned.rda")
 load("attempt_4/results/nn_tuned.rda")
+load("attempt_4/results/knn_tuned.rda")
+load("attempt_4/results/mars_tuned.rda")
 
 
 data_stacks <- stacks() %>%
@@ -24,14 +26,17 @@ data_stacks <- stacks() %>%
   add_candidates(nn_tuned) %>% 
   add_candidates(rf_tuned) %>%
   add_candidates(svm_radial_tuned) %>% 
-  add_candidates(svm_poly_tuned)
+  add_candidates(svm_poly_tuned) %>%
+  add_candidates(mars_tuned) %>% 
+  add_candidates(knn_tuned)
 
-save(data_stacks, file = "attempt_4/results/data_stacks.rda")
+save(data_stacks, file = "attempt_4/results/data_stacks1.rda")
 
 as_tibble(data_stacks)
 
 data_model <- data_stacks %>% 
-  blend_predictions(penalty = 10^(-6:-1))
+  blend_predictions(penalty = 10^(-6:-1)) %>% 
+  fit_members()
 
 data_model <- data_model %>% 
   fit_members()
@@ -45,5 +50,5 @@ predictions <- test %>%
   select(id, .pred) %>% 
   rename(y = .pred)
 
-write_csv(predictions, file = "submissions/23_submission.csv")
+write_csv(predictions, file = "submissions/24_submission.csv")
 
