@@ -1,5 +1,5 @@
 ---
-title: "Regression Prediciton Executive Summary"
+title: "Regression Prediction Executive Summary"
 author: "Ryan Nguyen"
 
 format:
@@ -15,6 +15,52 @@ execute:
 from: markdown+emoji  
 ---
 
-To begin the prediction problem, the data was read in and explored. The data was split into a training data set and test data set with a 0.75 proportion, stratified on our outcome variable y, in order to prevent overfitting. From here, the data was explored to see the missingness of all variables, the distribution of the outcome variable, variables with zero variance, and miscoded categorical variables, to look for potential transformations. 
+# Predicting Y (Regression)
 
-After exploring the data, the next step was variable selection. Since there were over 750 variables, it was important to find which variables were impactful in predicting the outcome variable. An initial recipe was created and tuned with a lasso model and a random forest model to do so. In the lasso model, variables with a coefficient of 0 were filtered out. In the random forest model, an importance plot was constructed to view the importand variables. 
+**GitHub Repo:**
+
+To begin the prediction problem, the data was read in and explored. The data was split into a training data set and test data set with a 0.75 proportion, stratified on the outcome variable y, in order to prevent overfitting. From here, the data was explored to see the missingness of all variables, the distribution of the outcome variable, variables with zero variance, and miscoded categorical variables, to look for potential transformations.
+
+After exploring the data, the next step was variable selection. Since there were over 750 variables, it was important to find which variables were impactful in predicting the outcome variable. An initial recipe was created and tuned with a lasso model and a random forest model to do so. In the lasso model, variables with a coefficient of 0 were filtered out. In the random forest model, an importance plot was constructed to view the important variable. This process was repeated multiple times with minor changes in the initial recipe. Ultimately, the lasso model resulted in 15 variables, and the random forest models resulted in 16 unique variables.
+
+From here, feature engineering could occur. Throughout all attempts, the training data was folded using v-fold cross-validation, with 5 folds and 3 repeats, to help prevent overfitting.
+
+### Attempt 1
+
+For Attempt 1, the feature engineering was focused on finding the best recipe and variable selection. Thus, multiple recipes were constructed-- some using just the lasso variables, some using just the random forest variables, and some using a combination of both. While the recipes varied, each included `step_nzv()` to remove zero variance variables, `step_normalize()` to center and normalize all variables, and `step_impute_()` to impute missing variables in different ways. The recipes were prep and baked to ensure there were no computational errors. 8 models were run and tuned with the various recipes, including a boosted tree model, an elastic net model, a k-nearest neighbors model, a MARS model, a neural network model, a random forest model, a SVM polynomial model, and an SVM radial model. Each model was submitted on Kaggle. The recipe that resulted in the lowest RMSE was the recipe that used a combination of ALL variables from lasso variable selection and random forest selection, with 25 variables being used in total.
+
+### Attempt 2
+
+In Attempt 2, the goal was to find which specific models were performing the best for this specific problem. The recipe consisted of `step_nzv()`, `step_normalize()`, and `step_impute_knn()`. All 8 models were each tuned with their respective parameters, using the saved folds and recipe, and the workflows and tuning results were saved. The model with the greatest roc_auc was selected from each model, and the results were compared in the table and graph below.
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(kableExtra)
+load("attempt_2/results/model_results.rda")
+
+mr_2 <- model_results %>% 
+  select(wflow_id, mean, std_err) %>% 
+  rename(model = wflow_id,
+         rmse = mean)
+
+mr_2_table <- mr_2 %>% 
+  kbl()  %>%
+  kable_styling()
+
+mr_2_table
+
+ggplot(mr_2, aes (x = model, y = rmse, color = model)) +
+  geom_point() +
+  labs(y = "rmse", x = "Model") +
+  geom_errorbar(aes(ymin = rmse - std_err, ymax = rmse + std_err), width = 0.3) +
+  ggtitle(label = "Attempt 2 Best Results") +
+  ylim(c(9.35, 10.75)) + 
+  theme(legend.position = "none")
+```
+
+Here, the best model was svm radial with an rmse of 9.778, followed by svm poly with an rmse of 9.856, then random forest with an rmse of 9.860. Since svm radial was the best, the workflow was finalized and fit on the entire training set; this fit was used to predict the final testing set. The predictions were then written as a .csv file and submitted, resulting in an rmse of 9.17026, which does not pass the benchmark of 9.0. This process was repeated with svm poly and the random forest model; however none of these models passed the benchmark.
+
+### Attempt 3
+
+For Attempt 3, the goal was to stack the best 3 models that was found in order to improve and lower the RMSE.
