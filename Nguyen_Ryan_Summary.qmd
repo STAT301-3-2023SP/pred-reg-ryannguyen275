@@ -17,7 +17,7 @@ from: markdown+emoji
 
 # Predicting Y (Regression)
 
-**GitHub Repo:**
+**GitHub Repo:** <https://github.com/STAT301-3-2023SP/pred-reg-ryannguyen275>
 
 To begin the prediction problem, the data was read in and explored. The data was split into a training data set and test data set with a 0.75 proportion, stratified on the outcome variable y, in order to prevent overfitting. From here, the data was explored to see the missingness of all variables, the distribution of the outcome variable, variables with zero variance, and miscoded categorical variables, to look for potential transformations.
 
@@ -59,8 +59,25 @@ ggplot(mr_2, aes (x = model, y = rmse, color = model)) +
   theme(legend.position = "none")
 ```
 
-Here, the best model was svm radial with an rmse of 9.778, followed by svm poly with an rmse of 9.856, then random forest with an rmse of 9.860. Since svm radial was the best, the workflow was finalized and fit on the entire training set; this fit was used to predict the final testing set. The predictions were then written as a .csv file and submitted, resulting in an rmse of 9.17026, which does not pass the benchmark of 9.0. This process was repeated with svm poly and the random forest model; however none of these models passed the benchmark.
+Here, the best model was SVM radial with an rmse of 9.778, followed by SVM poly with an rmse of 9.856, then random forest with an rmse of 9.860. Since SVM radial was the best, the workflow was finalized and fit on the entire training set; this fit was used to predict the final testing set. The predictions were then written as a .csv file and submitted, resulting in an rmse of 9.17026, which does not pass the benchmark of 9.0. This process was repeated with SVM poly and the random forest model; however none of these models passed the benchmark.
 
 ### Attempt 3
 
-For Attempt 3, the goal was to stack the best 3 models that was found in order to improve and lower the RMSE.
+For Attempt 3, the goal was to stack the best 3 models that was found and edit tuning parameters in order to improve and lower the RMSE. The recipe was the same as attempt 2. The random forest model, the SVM poly model, and SVM radial model were rerun, this time ensuring to save workflow and predictions with `control_stack_resamples()`. The models were tuned and combined into a data stack, then regularization was performed to determine how member model output will ultimately be combined in the final prediction by fitting a LASSO model on the stack, predicting the true assessment set outcome using the predictions from each of the candidate members. Then, the candidates with non-zero stacking coefficients were fit on the full training set, which was used to predict the final testing set. The predictions were then written as a .csv file and submitted, resulting in an rmse of 8.926, which passes the benchmark of 9.0. Thus, stacking the models improved the overall prediction significantly.
+
+While the problem could end here, it would be interesting to see how stacking various other models would impact the performance.
+
+### Attempt 4
+
+Although the benchmark has been passed, for Attempt 4, methods are explored to further improve the model. To edit the recipe, a `step_YeoJohnson()` was added on all predictors to see if this helped, as well as a `step_corr()` to remove directly correlated variables. This recipe was run and tuned on all 8 models, with the intention of stacking. Initially, the best 6 performing models from Attempt 2 were stacked, fitted, and used to predict on the final testing set including the 3 from Attempt 3 plus neural networks, boosted tree, and elastic net. Further, we can stack ALL 8 models to see if this would improve the rmse as well. The coefficients can be seen below. As we can see, both excluded all except the boosted tree, linear regression, neural networks, SVM poly, and SVM radial models.
+
+```{r}
+library(stacks)
+library(tidymodels)
+library(tidyverse)
+
+```
+
+![](attempt_4/results/stacks6.png){width="325"} ![](attempt_4/results/stacks8.png){width="325"}
+
+This stacked models were used to predict the final testing set. The predictions were then written as a .csv file and submitted for both stacked ensemble models. The model with the top 6 (later 5) models resulted in an rmse of 8.81411, which is an improvement from the model with the top 3 stacked. The model with the all 8 (later 5) models resulted in an rmse of 8.91895, which is better than the model with the top 3 stacked, but not better than the model with the top 6 stacked.

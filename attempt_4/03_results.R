@@ -30,18 +30,32 @@ data_stacks <- stacks() %>%
   add_candidates(mars_tuned) %>% 
   add_candidates(knn_tuned)
 
-save(data_stacks, file = "attempt_4/results/data_stacks1.rda")
-
 as_tibble(data_stacks)
 
 data_model <- data_stacks %>% 
   blend_predictions(penalty = 10^(-6:-1)) %>% 
   fit_members()
 
+stacks6 <- autoplot(data_model, type = "weights")
+save(stacks6, file = "attempt_4/results/stacks6.rda")
+load("attempt_4/results/stacks6.rda")
+
+stacks6 <- stacks6 +
+  labs(title = "6 Models Stacked (penalty = 0.1)")
+
+ggsave("attempt_4/results/stacks6.png", plot = stacks6)
+
 data_model <- data_model %>% 
   fit_members()
 
 load("attempt_4/results/data_stacks1.rda")
+
+stacks8 <- autoplot(data_model, type = "weights") +
+  labs(title = "8 Models Stacked (penalty = 0.1)")
+
+ggsave("attempt_4/results/stacks8.png", plot = stacks8)
+
+
  
 ##### FINAL FIT ######################################################
 
