@@ -1,0 +1,20 @@
+---
+title: "Regression Prediciton Executive Summary"
+author: "Ryan Nguyen"
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    echo: false
+    link-external-newwindow: true
+    
+execute:
+  warning: false
+
+from: markdown+emoji  
+---
+
+To begin the prediction problem, the data was read in and explored. The data was split into a training data set and test data set with a 0.75 proportion, stratified on our outcome variable y, in order to prevent overfitting. From here, the data was explored to see the missingness of all variables, the distribution of the outcome variable, variables with zero variance, and miscoded categorical variables, to look for potential transformations. 
+
+After exploring the data, the next step was variable selection. Since there were over 750 variables, it was important to find which variables were impactful in predicting the outcome variable. An initial recipe was created and tuned with a lasso model and a random forest model to do so. In the lasso model, variables with a coefficient of 0 were filtered out. In the random forest model, an importance plot was constructed to view the importand variables. 
