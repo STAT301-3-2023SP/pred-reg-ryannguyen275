@@ -41,7 +41,7 @@ data_model <- data_stacks %>%
 data_model <- data_model %>% 
   fit_members()
 
-load("attempt_4/results/data_stacks.rda")
+load("attempt_4/results/data_stacks1.rda")
  
 ##### FINAL FIT ######################################################
 
